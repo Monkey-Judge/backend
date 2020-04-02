@@ -1,10 +1,11 @@
 var mysql = require('../modules/mysql');
 
-function User(id, login, senha, email, confirmed){
+function User(id, login, password, salt, email, confirmed){
     this.id = id;
     this.login = login;
-    this.senha = senha;
+    this.password = password;
     this.email = email;
+    this.salt = salt;
     this.confirmed = confirmed;
 }
  
@@ -15,8 +16,8 @@ function erase(id){
 }
 
 function register(user, callback){
-    mysql.pool.query('insert into users (login, password, email, confirmed) values(?, ?, ?, ?)',
-        [user.login, user.senha, user.email, 0],
+    mysql.pool.query('insert into users (login, password, salt, email, confirmed) values(?, ?, ?, ?, ?)',
+        [user.login, user.password, user.salt, user.email, 0],
             function(error, results, fields){
                 if(error){
                     return callback(error);
