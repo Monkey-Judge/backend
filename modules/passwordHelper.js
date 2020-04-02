@@ -1,7 +1,7 @@
 'use strict'
 const crypto = require('crypto')
 const SALT_SIZE = 20
-const MAX_PASSWORD_LENGTH = 45
+const PASSWORD_LENGTH = 45
 
 function genRandomString (length) {
   return crypto.randomBytes(Math.ceil(length / 2))
@@ -12,7 +12,7 @@ function genRandomString (length) {
 function sha512 (password, salt) {
   const hash = crypto.createHmac('sha512', salt)
   hash.update(password)
-  const passwordHash = hash.digest('hex').slice(0, MAX_PASSWORD_LENGTH)
+  const passwordHash = hash.digest('hex').slice(0, PASSWORD_LENGTH)
   return {
     salt: salt,
     hash: passwordHash
@@ -28,7 +28,7 @@ function encrypt (password) {
 function validate (password, encryptedPassword, salt) {
   const hash = crypto.createHmac('sha512', salt)
   hash.update(password)
-  const passwordHash = hash.digest('hex').slice(0, MAX_PASSWORD_LENGTH)
+  const passwordHash = hash.digest('hex').slice(0, PASSWORD_LENGTH)
   return passwordHash === encryptedPassword
 }
 

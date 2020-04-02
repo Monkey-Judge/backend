@@ -1,7 +1,9 @@
+/* global test, expect */
+
 var user = require('../model/user')
 
 test('correctRegister', done => {
-  usuario = {
+  const usuario = {
     id: 0,
     login: 'rafael',
     senha: 'rafael',
@@ -18,7 +20,7 @@ test('correctRegister', done => {
 })
 
 test('confirmUserRegister', done => {
-  usuario = {
+  const usuario = {
     id: 0,
     login: 'rafael',
     senha: 'rafael',
@@ -40,7 +42,7 @@ test('confirmUserRegister', done => {
 })
 
 test('findByLogin', done => {
-  usuario = {
+  const usuario = {
     id: 0,
     login: 'rafael',
     senha: 'rafael',

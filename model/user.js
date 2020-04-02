@@ -11,7 +11,7 @@ function User (id, login, password, salt, email, confirmed) {
 
 function erase (id) {
   mysql.pool.query('delete from users where id = ?', [id], function (error, results, fields) {
-    
+
   })
 }
 
