@@ -1,6 +1,6 @@
 var mysql = require('../modules/mysql')
 
-function User (id, login, password, salt, email, confirmed) {
+function User (id = 0, login, password, salt, email, confirmed = 0) {
   this.id = id
   this.login = login
   this.password = password

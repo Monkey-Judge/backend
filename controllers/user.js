@@ -5,7 +5,6 @@ const passwordHelper = require('../modules/passwordHelper')
 
 function register (req, res, next) {
   const encryptedPassword = passwordHelper.encrypt(req.body.password)
-  console.log(encryptedPassword)
   const user = new userModel.User(
     1,
     req.body.login,
@@ -16,8 +15,10 @@ function register (req, res, next) {
   )
 
   userModel.register(user, (err, id) => {
-    if (!err) { res.status(201).send() } else {
-      res.status(409).send()
+    if (!err) {
+      res.status(201).send()
+    } else {
+      res.status(400).send()
     }
   })
 }
