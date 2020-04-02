@@ -6,8 +6,10 @@ test('correctRegister', done => {
   const usuario = {
     id: 0,
     login: 'rafael',
-    senha: 'rafael',
-    email: 'rafael@gmail.com'
+    salt: 'salt',
+    password: 'rafael',
+    email: 'rafael@gmail.com',
+    confirmed: false
   }
 
   user.register(usuario, function (error, id) {
@@ -23,7 +25,8 @@ test('confirmUserRegister', done => {
   const usuario = {
     id: 0,
     login: 'rafael',
-    senha: 'rafael',
+    salt: 'salt',
+    password: 'rafael',
     email: 'rafael@gmail.com',
     confirmed: false
   }
@@ -45,7 +48,8 @@ test('findByLogin', done => {
   const usuario = {
     id: 0,
     login: 'rafael',
-    senha: 'rafael',
+    salt: 'salt',
+    password: 'rafael',
     email: 'rafael@gmail.com',
     confirmed: false
   }
