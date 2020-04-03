@@ -1,6 +1,6 @@
 var mysql = require('../modules/mysql')
 
-function User (id = 0, login, password, salt, email, confirmed = 0) {
+function User (id, login, password, salt, email, confirmed) {
   this.id = id
   this.login = login
   this.password = password
@@ -10,47 +10,57 @@ function User (id = 0, login, password, salt, email, confirmed = 0) {
 }
 
 function erase (id) {
-  mysql.pool.query('delete from users where id = ?', [id], function (error, results, fields) {
+  return new Promise((resolve, reject) => {
+    mysql.pool.query('delete from users where id = ?', [id], function (error, results, fields) {
+      if (error !== null) reject(error)
 
+      resolve()
+    })
   })
 }
 
-function register (user, callback) {
-  mysql.pool.query('insert into users (login, password, salt, email, confirmed) values(?, ?, ?, ?, ?)',
-    [user.login, user.password, user.salt, user.email, 0],
-    function (error, results, fields) {
-      if (error) {
-        return callback(error)
-      }
+function register (user) {
+  return new Promise((resolve, reject) => {
+    mysql.pool.query('insert into users (login, password, salt, email, confirmed) values(?, ?, ?, ?, ?)',
+      [user.login, user.password, user.salt, user.email, 0],
+      function (error, results, fields) {
+        if (error) {
+          return reject(error)
+        }
 
-      return callback(null, results.insertId)
-    })
+        return resolve(results.insertId)
+      })
+  })
 }
 
-function findByLogin (login, callback) {
-  mysql.pool.query('SELECT *FROM users where login = ?', [login],
-    function (error, results, fields) {
-      if (error) {
-        return callback(error)
-      }
-      if (results.length !== 0) {
-        results[0].confirmed = results[0].confirmed === 1
-        return callback(error, results[0])
-      } else {
-        return callback(error, null)
-      }
-    })
+function findByLogin (login) {
+  return new Promise((resolve, reject) => {
+    mysql.pool.query('SELECT * FROM users where login = ?', [login],
+      function (error, results, fields) {
+        if (error) {
+          return reject(error)
+        }
+        if (results.length !== 0) {
+          results[0].confirmed = results[0].confirmed === 1
+          return resolve(results[0])
+        } else {
+          return reject(new Error('No user with login equal to ' + login))
+        }
+      })
+  })
 }
 
-function confirmUserRegister (id, callback) {
-  mysql.pool.query('update users set confirmed=1 where id = ?', [id],
-    function (error, results, fields) {
-      if (error) {
-        return callback(error)
-      }
+function confirmUserRegister (id) {
+  return new Promise((resolve, reject) => {
+    mysql.pool.query('update users set confirmed=1 where id = ?', [id],
+      function (error, results, fields) {
+        if (error) {
+          return reject(error)
+        }
 
-      return callback(null)
-    })
+        return resolve()
+      })
+  })
 }
 
 module.exports = {

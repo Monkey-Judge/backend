@@ -1,8 +1,8 @@
 /* global test, expect */
 
-var user = require('../model/user')
+const user = require('../model/user')
 
-test('correctRegister', done => {
+test('correctRegister', () => {
   const usuario = {
     id: 0,
     login: 'rafael',
@@ -12,16 +12,19 @@ test('correctRegister', done => {
     confirmed: false
   }
 
+  return user.register(usuario)
+    .then((id) => user.erase(id))
+    .catch((error) => expect(error).toBe(null))
+  /*
   user.register(usuario, function (error, id) {
     expect(error).toBe(null)
 
-    user.erase(id)
-
-    done()
+    user.erase(id).then(() => done())
   })
+  */
 })
 
-test('confirmUserRegister', done => {
+test('confirmUserRegister', () => {
   const usuario = {
     id: 0,
     login: 'rafael',
@@ -31,6 +34,14 @@ test('confirmUserRegister', done => {
     confirmed: false
   }
 
+  return user.register(usuario)
+    .then((id) => user.confirmUserRegister(id)
+      .then(() => user.findByLogin(usuario.login))
+      .then((usuario2) => expect(usuario2.confirmed).toBe(true))
+      .then(() => user.erase(id)))
+    .catch((error) => expect(error).toBe(null))
+
+  /*
   user.register(usuario, function (error, id) {
     expect(error).toBe(null)
 
@@ -42,9 +53,10 @@ test('confirmUserRegister', done => {
       done()
     })
   })
+  */
 })
 
-test('findByLogin', done => {
+test('findByLogin', () => {
   const usuario = {
     id: 0,
     login: 'rafael',
@@ -54,6 +66,15 @@ test('findByLogin', done => {
     confirmed: false
   }
 
+  return user.register(usuario)
+    .then((id) => user.findByLogin(usuario.login)
+      .then((usuario2) => {
+        usuario.id = id
+        expect(usuario2).toEqual(usuario)
+      })
+      .then(() => user.erase(id)))
+    .catch((error) => expect(error).toBe(null))
+  /*
   user.register(usuario, function (error, id) {
     expect(error).toBe(null)
 
@@ -62,9 +83,8 @@ test('findByLogin', done => {
 
       expect(id).toBe(usuario.id)
 
-      user.erase(id)
-
-      done()
+      user.erase(id).then(() => done())
     })
   })
+  */
 })
