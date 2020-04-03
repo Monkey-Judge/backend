@@ -13,8 +13,7 @@ function erase (id) {
   return new Promise((resolve, reject) => {
     mysql.pool.query('delete from users where id = ?', [id], function (error, results, fields) {
       if (error !== null) reject(error)
-
-      resolve()
+      else resolve()
     })
   })
 }

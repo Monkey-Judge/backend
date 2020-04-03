@@ -14,13 +14,12 @@ function register (req, res, next) {
     0
   )
 
-  userModel.register(user, (err, id) => {
-    if (!err) {
-      res.status(201).send()
-    } else {
+  userModel.register(user)
+    .then((id) => res.status(201).send())
+    .catch((error) => {
+      console.log('ERROR: %s', error.message)
       res.status(400).send()
-    }
-  })
+    })
 }
 
 module.exports = {

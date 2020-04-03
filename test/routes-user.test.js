@@ -4,7 +4,7 @@ const request = require('supertest')
 const app = require('../app')
 const truncate = require('../utils/truncate')
 
-describe('Post Endpoints', () => {
+describe('User registration', () => {
   afterEach(async () => {
     await truncate.truncate('users')
   })
