@@ -8,16 +8,18 @@
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
+    "crypto-js": "^4.0.0",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jest": "^25.2.2",
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
-    "pug": "2.0.0-beta11"
+    "pug": "^2.0.4"
   },
   "devDependencies": {
     "jest": "^25.1.0",
-    "standard": "^14.3.3"
+    "standard": "^14.3.3",
+    "supertest": "^4.0.2"
   }
 }

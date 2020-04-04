@@ -1,64 +1,90 @@
-var user = require('../model/user');
+/* global test, expect */
 
-test('correctRegister', done => {
-    usuario = {
-        id: 0,
-        login: 'rafael',
-        senha: 'rafael',
-        email: 'rafael@gmail.com'
-    };
+const user = require('../model/user')
 
-    user.register(usuario, function(error, id){
-        expect(error).toBe(null);
+test('correctRegister', () => {
+  const usuario = {
+    id: 0,
+    login: 'rafael',
+    salt: 'salt',
+    password: 'rafael',
+    email: 'rafael@gmail.com',
+    confirmed: false
+  }
 
-        user.erase(id);
+  return user.register(usuario)
+    .then((id) => user.erase(id))
+    .catch((error) => expect(error).toBe(null))
+  /*
+  user.register(usuario, function (error, id) {
+    expect(error).toBe(null)
 
-        done();
-    });
-});
+    user.erase(id).then(() => done())
+  })
+  */
+})
 
-test('confirmUserRegister', done => {
-    usuario = {
-        id: 0,
-        login: 'rafael',
-        senha: 'rafael',
-        email: 'rafael@gmail.com',
-        confirmed: false
-    };
+test('confirmUserRegister', () => {
+  const usuario = {
+    id: 0,
+    login: 'rafael',
+    salt: 'salt',
+    password: 'rafael',
+    email: 'rafael@gmail.com',
+    confirmed: false
+  }
 
-    user.register(usuario, function(error, id){
-        expect(error).toBe(null);
+  return user.register(usuario)
+    .then((id) => user.confirmUserRegister(id)
+      .then(() => user.findByLogin(usuario.login))
+      .then((usuario2) => expect(usuario2.confirmed).toBe(true))
+      .then(() => user.erase(id)))
+    .catch((error) => expect(error).toBe(null))
 
-        user.confirmUserRegister(id, function(error){
-            expect(error).toBe(null);
+  /*
+  user.register(usuario, function (error, id) {
+    expect(error).toBe(null)
 
-            user.erase(id);
+    user.confirmUserRegister(id, function (error) {
+      expect(error).toBe(null)
 
-            done();
-        });
-    });
-});
+      user.erase(id)
 
-test('findByLogin', done => {
-    usuario = {
-        id: 0,
-        login: 'rafael',
-        senha: 'rafael',
-        email: 'rafael@gmail.com',
-        confirmed: false
-    };
+      done()
+    })
+  })
+  */
+})
 
-    user.register(usuario, function(error, id){
-        expect(error).toBe(null);
+test('findByLogin', () => {
+  const usuario = {
+    id: 0,
+    login: 'rafael',
+    salt: 'salt',
+    password: 'rafael',
+    email: 'rafael@gmail.com',
+    confirmed: false
+  }
 
-        user.findByLogin('rafael', function(error, usuario){
-            expect(error).toBe(null);
+  return user.register(usuario)
+    .then((id) => user.findByLogin(usuario.login)
+      .then((usuario2) => {
+        usuario.id = id
+        expect(usuario2).toEqual(usuario)
+      })
+      .then(() => user.erase(id)))
+    .catch((error) => expect(error).toBe(null))
+  /*
+  user.register(usuario, function (error, id) {
+    expect(error).toBe(null)
 
-            expect(id).toBe(usuario.id);
+    user.findByLogin('rafael', function (error, usuario) {
+      expect(error).toBe(null)
 
-            user.erase(id);
+      expect(id).toBe(usuario.id)
 
-            done();
-        });
-    });
-});
+      user.erase(id).then(() => done())
+    })
+  })
+  */
+})
