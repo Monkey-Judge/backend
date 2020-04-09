@@ -22,6 +22,34 @@ function register (req, res, next) {
     })
 }
 
+function login (req, res, next) {
+  if (req.body.login === null) {
+    console.log('ERROR: Message body without username/login')
+    res.status(400).send()
+  }
+
+  if (res.body.password === null) {
+    console.log('ERROR: Message body without password')
+    res.status(400).send()
+  }
+
+  const username = req.body.login
+  const password = req.body.password
+
+  userModel.findByLogin(username)
+    .then(user => {
+      if (passwordHelper.validate(password, user.password, user.salt)) {
+        const token = '<TOKEN HERE>'
+        res.status(200).send({
+          token
+        })
+      } else {
+        res.status(403).send()
+      }
+    })
+}
+
 module.exports = {
-  register: register
+  register: register,
+  login: login
 }

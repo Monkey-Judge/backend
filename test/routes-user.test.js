@@ -40,3 +40,34 @@ describe('User registration', () => {
     expect(res.statusCode).toEqual(400)
   })
 })
+
+describe('User login route', () => {
+  afterEach(async () => {
+    await truncate.truncate('users')
+  })
+
+  it('should sign in existent user', async () => {
+    const user = {
+      login: 'foo',
+      email: 'foo@gmail.com',
+      password: 'foo456'
+    }
+
+    request(app)
+      .post('/users/register')
+      .send(user)
+      .then(() => request(app)
+        .post('/users/login')
+        .send({
+          login: 'foo',
+          password: 'foo456'
+        })
+        .expect(200)
+        .expect(res => {
+          if (!('token' in res.body)) {
+            throw Error('missing token on response')
+          }
+        })
+      )
+  })
+})
