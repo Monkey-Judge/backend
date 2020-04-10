@@ -2,7 +2,7 @@
 
 const userModel = require('../model/user')
 const passwordHelper = require('../modules/passwordHelper')
-const jwt = require('jsonwebtoken')
+const jwt = require('../modules/jwt')
 
 function register (req, res, next) {
   const encryptedPassword = passwordHelper.encrypt(req.body.password)
@@ -40,9 +40,7 @@ function login (req, res, next) {
   userModel.findByLogin(username)
     .then(user => {
       if (passwordHelper.validate(password, user.password, user.salt)) {
-        const token = jwt.sign({
-          id: user.id
-        }, process.env.JWT_KEY)
+        const token = jwt.sign({ id: user.id })
 
         res.status(200).send({
           token
