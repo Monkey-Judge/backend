@@ -24,14 +24,16 @@ function register (req, res, next) {
 }
 
 function login (req, res, next) {
-  if (req.body.login === null) {
+  if (!('login' in req.body)) {
     console.log('ERROR: Message body without username/login')
     res.status(400).send()
+    return
   }
 
-  if (res.body.password === null) {
+  if (!('password' in req.body)) {
     console.log('ERROR: Message body without password')
     res.status(400).send()
+    return
   }
 
   const username = req.body.login
