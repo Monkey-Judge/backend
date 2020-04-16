@@ -65,7 +65,6 @@ function confirm (req, res, next) {
     if(err) {
       res.status(403).send()
     } else {
-      console.log(decoded)
       userModel.confirmUserRegister(decoded.id)
         .then(() => res.status(202).send())
         .catch((error) => {
