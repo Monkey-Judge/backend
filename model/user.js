@@ -51,6 +51,19 @@ function findByLogin (login) {
 
 function confirmUserRegister (id) {
   return new Promise((resolve, reject) => {
+    mysql.pool.query('SELECT * FROM users where id = ?', [id],
+      function (error, results, fields) {
+        if (error) {
+          return reject(error)
+        }
+        if (results.length !== 0) {
+          if(results[0].confirmed == 1){
+            return reject(new Error('User already confirmed'))
+          }
+        } else {
+          return reject(new Error('User not found'))
+        }
+      })
     mysql.pool.query('update users set confirmed=1 where id = ?', [id],
       function (error, results, fields) {
         if (error) {
