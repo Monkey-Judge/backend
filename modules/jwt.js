@@ -1,4 +1,5 @@
 'use strict'
+require('dotenv').config()
 
 const jwt = require('jsonwebtoken')
 
@@ -11,21 +12,21 @@ function sign (payload) {
 }
 
 function auth (req, res, next) {
-	var token = req.headers['authorization'];
-	
-	if(!token){
-		return res.status(401).send('Token inexistente');
-	}
+  var token = req.headers.authorization
 
-	jwt.verify(token, process.env.JWT_KEY, function(err, decoded) {
-		if (err){
-			return res.status(401).send('Token invalido');	
-		} 
+  if (!token) {
+    return res.status(401).send('Token inexistente')
+  }
 
-		req.userData = decoded;
-		
-		next();
-	});
+  jwt.verify(token, process.env.JWT_KEY, function (err, decoded) {
+    if (err) {
+      return res.status(401).send('Token invalido')
+    }
+
+    req.userData = decoded
+
+    next()
+  })
 }
 
 module.exports = {

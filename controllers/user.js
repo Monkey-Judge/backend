@@ -1,5 +1,5 @@
 'use strict'
-require('dotenv/config')
+require('dotenv').config()
 const userModel = require('../model/user')
 const passwordHelper = require('../modules/passwordHelper')
 const jwt = require('../modules/jwt')
@@ -33,8 +33,7 @@ async function register (req, res, next) {
     const userId = await userModel.register(user)
     const token = jwt.sign({ id: userId })
     console.log(token)
-    if(process.env.NODE_ENV !== 'test')
-    {
+    if (process.env.NODE_ENV !== 'test') {
       await emailSender.sendRegister(
         req.body.email,
         req.body.login,

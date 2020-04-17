@@ -1,7 +1,8 @@
-require('dotenv/config')
 const sgMail = require('@sendgrid/mail')
+require('dotenv').config()
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-const urlConfirmation = 'www.monkeyjudge.com/auth/'
+console.log(process.env.SENDGRID_API_KEY)
+const urlConfirmation = 'www.monkeyjudge.com/confirm/'
 
 function sendRegister (to, name, token) {
   const link = urlConfirmation + token
