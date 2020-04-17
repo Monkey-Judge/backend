@@ -10,6 +10,25 @@ function sign (payload) {
   return jwt.sign(payload, secretKey, { expiresIn: '1 day' })
 }
 
+function auth (req, res, next) {
+	var token = req.headers['authorization'];
+	
+	if(!token){
+		return res.status(401).send('Token inexistente');
+	}
+
+	jwt.verify(token, process.env.JWT_KEY, function(err, decoded) {
+		if (err){
+			return res.status(401).send('Token invalido');	
+		} 
+
+		req.userData = decoded;
+		
+		next();
+	});
+}
+
 module.exports = {
-  sign: sign
+  sign: sign,
+  auth: auth
 }
