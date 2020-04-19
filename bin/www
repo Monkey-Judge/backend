@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+
 /**
  * Module dependencies.
  */
@@ -7,6 +8,13 @@
 var app = require('../app');
 var debug = require('debug')('monkeybackend:server');
 var http = require('http');
+
+/**
+ * Loading environment variables defined in .env file
+ */
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 /**
  * Get port from environment and store in Express.
