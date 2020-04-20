@@ -27,6 +27,7 @@ CREATE TABLE `users` (
   `login` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
   `salt` varchar(20) NOT NULL,
+  `role` varchar(10) NOT NULL,
   `email` varchar(45) NOT NULL,
   `confirmed` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
