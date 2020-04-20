@@ -5,7 +5,6 @@ const passwordHelper = require('../modules/passwordHelper')
 const jwt = require('../modules/jwt')
 const jwebt = require('jsonwebtoken')
 
-
 function register (req, res, next) {
   const encryptedPassword = passwordHelper.encrypt(req.body.password)
   const user = new userModel.User(
@@ -61,8 +60,8 @@ function confirm (req, res, next) {
     res.status(400).send()
     return
   }
-  jwebt.verify(req.body.token, 'teste', function(err, decoded) {
-    if(err) {
+  jwebt.verify(req.body.token, process.env.JWT_KEY, function (err, decoded) {
+    if (err) {
       res.status(403).send()
     } else {
       userModel.confirmUserRegister(decoded.id)
@@ -72,8 +71,7 @@ function confirm (req, res, next) {
           res.status(400).send()
         })
     }
-  });
-
+  })
 }
 
 module.exports = {

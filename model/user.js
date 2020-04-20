@@ -57,7 +57,7 @@ function confirmUserRegister (id) {
           return reject(error)
         }
         if (results.length !== 0) {
-          if(results[0].confirmed == 1){
+          if (results[0].confirmed === 1) {
             return reject(new Error('User already confirmed'))
           }
         } else {

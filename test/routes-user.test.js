@@ -1,9 +1,7 @@
 /* global describe, expect, it, afterEach */
 
 const request = require('supertest')
-const jwt = require('../modules/jwt')
 const jwebt = require('jsonwebtoken')
-
 const app = require('../app')
 const truncate = require('../utils/truncate')
 
@@ -48,18 +46,18 @@ describe('User confirmation', () => {
   afterEach(async () => {
     await truncate.truncate('users')
   })
-  const payload = ({id: '1'})
-  const token = jwebt.sign(payload,'teste')
+  const payload = ({ id: '1' })
+  const token = jwebt.sign(payload, process.env.JWT_KEY)
   it('should confirm a user ', async () => {
     const res = await request(app)
       .post('/users/confirm')
-      .send({ token: token})
+      .send({ token: token })
     expect(res.statusCode).toEqual(202)
   })
   it('should not confirm a user ', async () => {
     const res = await request(app)
       .post('/users/confirm')
-      .send({ token: token})
+      .send({ token: token })
     expect(res.statusCode).toEqual(400)
   })
   it('should not confirm a user ', async () => {
