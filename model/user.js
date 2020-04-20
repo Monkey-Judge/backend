@@ -20,7 +20,7 @@ function erase (id) {
 
 function register (user) {
   return new Promise((resolve, reject) => {
-    mysql.pool.query('insert into users (login, password, salt, email, confirmed) values(?, ?, ?, ?, ?)',
+    mysql.pool.query("insert into users (login, password, salt, role, email, confirmed) values(?, ?, ?, 'user', ?, ?)",
       [user.login, user.password, user.salt, user.email, 0],
       function (error, results, fields) {
         if (error) {
