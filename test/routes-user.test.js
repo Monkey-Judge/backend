@@ -149,6 +149,5 @@ describe('User login route', () => {
         password: 'bar123'
       })
       .expect(403)
-      .then(res => expect(res).toBe({}))
   })
 })
