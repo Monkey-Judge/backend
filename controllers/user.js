@@ -2,6 +2,7 @@
 const userModel = require('../model/user')
 const passwordHelper = require('../modules/passwordHelper')
 const jwt = require('../modules/jwt')
+const jwebt = require('jsonwebtoken')
 const emailSender = require('../service/mailer')
 
 async function register (req, res, next) {
@@ -81,7 +82,28 @@ function login (req, res, next) {
     })
 }
 
+function confirm (req, res, next) {
+  if (!('token' in req.body)) {
+    console.log('ERROR: Missing TOKEN')
+    res.status(400).send()
+    return
+  }
+  jwebt.verify(req.body.token, process.env.JWT_KEY, function (err, decoded) {
+    if (err) {
+      res.status(403).send()
+    } else {
+      userModel.confirmUserRegister(decoded.id)
+        .then(() => res.status(202).send())
+        .catch((error) => {
+          console.log('ERROR: %s', error.message)
+          res.status(400).send()
+        })
+    }
+  })
+}
+
 module.exports = {
   register: register,
-  login: login
+  login: login,
+  confirm: confirm
 }
