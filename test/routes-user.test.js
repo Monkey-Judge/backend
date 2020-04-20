@@ -47,35 +47,49 @@ describe('User confirmation', () => {
   afterEach(async () => {
     await truncate.truncate('users')
   })
-  const user2 = {
-    login: 'jose',
-    email: 'jose@gmail.com',
-    password: 'jose123'
-  }
 
   it('should confirm a user ', async () => {
-    await request(app)
+    const user2 = {
+      login: 'jose',
+      email: 'jose@gmail.com',
+      password: 'jose123'
+    }
+    var res = await request(app)
       .post('/users/register')
       .send(user2)
+    expect(res.statusCode).toEqual(201)
     const usuario = userModel.findByLogin(user2.login)
     const payload = ({ id: usuario.id })
     const token = jwebt.sign(payload, process.env.JWT_KEY)
-    const res = await request(app)
+    res = await request(app)
       .post('/users/confirm')
       .send({ token: token })
     expect(res.statusCode).toEqual(202)
   })
   it('should not confirm a user ', async () => {
+    const user2 = {
+      login: 'joao',
+      email: 'joao@gmail.com',
+      password: 'joao123'
+    }
+    var res = await request(app)
+      .post('/users/register')
+      .send(user2)
+    expect(res.statusCode).toEqual(201)
     const usuario = userModel.findByLogin(user2.login)
     const payload = ({ id: usuario.id })
     const token = jwebt.sign(payload, process.env.JWT_KEY)
-    const res = await request(app)
+    res = await request(app)
+      .post('/users/confirm')
+      .send({ token: token })
+    expect(res.statusCode).toEqual(202)
+    res = await request(app)
       .post('/users/confirm')
       .send({ token: token })
     expect(res.statusCode).toEqual(400)
   })
   it('should not confirm a user ', async () => {
-    const res = await request(app)
+    var res = await request(app)
       .post('/users/confirm')
     expect(res.statusCode).toEqual(400)
   })
