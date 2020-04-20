@@ -4,6 +4,7 @@ const request = require('supertest')
 const jwebt = require('jsonwebtoken')
 const app = require('../app')
 const truncate = require('../utils/truncate')
+const userModel = require('../model/user')
 
 describe('User registration', () => {
   afterEach(async () => {
@@ -46,15 +47,28 @@ describe('User confirmation', () => {
   afterEach(async () => {
     await truncate.truncate('users')
   })
-  const payload = ({ id: '1' })
-  const token = jwebt.sign(payload, process.env.JWT_KEY)
+  const user2 = {
+    login: 'jose',
+    email: 'jose@gmail.com',
+    password: 'jose123'
+  }
+
   it('should confirm a user ', async () => {
+    await request(app)
+      .post('/users/register')
+      .send(user2)
+    const usuario = userModel.findByLogin(user2.login)
+    const payload = ({ id: usuario.id })
+    const token = jwebt.sign(payload, process.env.JWT_KEY)
     const res = await request(app)
       .post('/users/confirm')
       .send({ token: token })
     expect(res.statusCode).toEqual(202)
   })
   it('should not confirm a user ', async () => {
+    const usuario = userModel.findByLogin(user2.login)
+    const payload = ({ id: usuario.id })
+    const token = jwebt.sign(payload, process.env.JWT_KEY)
     const res = await request(app)
       .post('/users/confirm')
       .send({ token: token })
@@ -121,5 +135,6 @@ describe('User login route', () => {
         password: 'bar123'
       })
       .expect(403)
+      .then(res => expect(res).toBe({}))
   })
 })
