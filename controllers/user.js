@@ -25,6 +25,7 @@ async function register (req, res, next) {
     encryptedPassword.hash,
     encryptedPassword.salt,
     req.body.email,
+    'user',
     false
   )
 
