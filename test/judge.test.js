@@ -4,8 +4,8 @@ const judge = require('../model/judge')
 
 test('correctRegister', () => {
   const jud = {
-    name: 'codeforces',
-    url: 'http://www.codeforces.com.br'
+    name: 'codeforces0',
+    url: 'http://www.codeforces0.com.br'
   }
 
   return judge.register(jud)
@@ -15,8 +15,8 @@ test('correctRegister', () => {
 
 test('sameJudge', () => {
   const jud = {
-    name: 'codeforces',
-    url: 'http://www.codeforces.com.br'
+    name: 'codeforces1',
+    url: 'http://www.codeforces1.com.br'
   }
 
   return judge.register(jud)
@@ -34,8 +34,8 @@ test('sameJudge', () => {
 
 test('findById', () => {
   const jud = {
-    name: 'codeforces',
-    url: 'http://www.codeforces.com.br'
+    name: 'codeforces2',
+    url: 'http://www.codeforces2.com.br'
   }
 
   return judge.register(jud)
