@@ -16,6 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `contests`
+--
+
+DROP TABLE IF EXISTS `contests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `begin` datetime NOT NULL,
+  `duration` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` mediumtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `contests`
+--
+
+LOCK TABLES `contests` WRITE;
+/*!40000 ALTER TABLE `contests` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contests` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `judges`
 --
 
@@ -30,7 +57,7 @@ CREATE TABLE `judges` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   UNIQUE KEY `url_UNIQUE` (`url`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +68,123 @@ LOCK TABLES `judges` WRITE;
 /*!40000 ALTER TABLE `judges` DISABLE KEYS */;
 INSERT INTO `judges` VALUES (8,'judge','judge.com.br');
 /*!40000 ALTER TABLE `judges` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `languages`
+--
+
+DROP TABLE IF EXISTS `languages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `languages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `timeAdd` int(11) NOT NULL,
+  `memoryAdd` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `languages`
+--
+
+LOCK TABLES `languages` WRITE;
+/*!40000 ALTER TABLE `languages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `languages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `participants`
+--
+
+DROP TABLE IF EXISTS `participants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `participants` (
+  `idUser` int(11) NOT NULL,
+  `idContest` int(11) NOT NULL,
+  `role` varchar(45) NOT NULL,
+  PRIMARY KEY (`idUser`),
+  KEY `fk_participant_contest_idx` (`idContest`),
+  CONSTRAINT `fk_participant_contest` FOREIGN KEY (`idContest`) REFERENCES `contests` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_participant_user` FOREIGN KEY (`idUser`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `participants`
+--
+
+LOCK TABLES `participants` WRITE;
+/*!40000 ALTER TABLE `participants` DISABLE KEYS */;
+/*!40000 ALTER TABLE `participants` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `problems`
+--
+
+DROP TABLE IF EXISTS `problems`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `problems` (
+  `idTask` int(11) NOT NULL,
+  `idContest` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idTask`),
+  KEY `fk_problem_contest_idx` (`idContest`),
+  CONSTRAINT `fk_problem_contest` FOREIGN KEY (`idContest`) REFERENCES `contests` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_problem_task` FOREIGN KEY (`idTask`) REFERENCES `tasks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `problems`
+--
+
+LOCK TABLES `problems` WRITE;
+/*!40000 ALTER TABLE `problems` DISABLE KEYS */;
+/*!40000 ALTER TABLE `problems` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `submissions`
+--
+
+DROP TABLE IF EXISTS `submissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `submissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `resolve` varchar(45) NOT NULL,
+  `timeSend` datetime NOT NULL,
+  `timeUsed` int(11) NOT NULL,
+  `memoryUsed` int(11) NOT NULL,
+  `code` varchar(3000) NOT NULL,
+  `idLanguage` int(11) NOT NULL,
+  `idUser` int(11) NOT NULL,
+  `idTask` int(11) NOT NULL,
+  `contestId` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_submissions_user_idx` (`idUser`),
+  KEY `fk_submissions_task_idx` (`idTask`),
+  KEY `fk_submissions_contest_idx` (`contestId`),
+  KEY `fk_submissions_language_idx` (`idLanguage`),
+  CONSTRAINT `fk_submissions_contest` FOREIGN KEY (`contestId`) REFERENCES `contests` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_submissions_language` FOREIGN KEY (`idLanguage`) REFERENCES `languages` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_submissions_task` FOREIGN KEY (`idTask`) REFERENCES `tasks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_submissions_user` FOREIGN KEY (`idUser`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `submissions`
+--
+
+LOCK TABLES `submissions` WRITE;
+/*!40000 ALTER TABLE `submissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `submissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -97,7 +241,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_UNIQUE` (`login`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-27 19:22:54
+-- Dump completed on 2020-05-01 21:55:40
