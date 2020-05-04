@@ -43,7 +43,7 @@ async function register (req, res, next) {
     }
     res.status(201).send()
   } catch (error) {
-    console.debug(error)
+    // console.debug(error)
     console.log('ERROR: %s', error.message)
     res.status(400).send()
   }
