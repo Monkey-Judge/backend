@@ -9,6 +9,7 @@ test('correctRegister', () => {
     salt: 'salt',
     password: 'rafael',
     email: 'rafael@gmail.com',
+    role: 'user',
     confirmed: false
   }
 
@@ -31,6 +32,7 @@ test('confirmUserRegister', () => {
     salt: 'salt',
     password: 'rafael',
     email: 'rafael@gmail.com',
+    role: 'user',
     confirmed: false
   }
 
@@ -63,6 +65,7 @@ test('findByLogin', () => {
     salt: 'salt',
     password: 'rafael',
     email: 'rafael@gmail.com',
+    role: 'user',
     confirmed: false
   }
 
