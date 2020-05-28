@@ -3,7 +3,7 @@ const userModel = require('../model/user')
 const passwordHelper = require('../modules/passwordHelper')
 const jwt = require('../modules/jwt')
 const jwebt = require('jsonwebtoken')
-// const emailSender = require('../service/mailer')
+const emailSender = require('../service/mailer')
 
 async function register (req, res, next) {
   const encryptedPassword = passwordHelper.encrypt(req.body.password)
