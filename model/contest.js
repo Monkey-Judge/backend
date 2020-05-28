@@ -20,6 +20,7 @@ function Submission (id, resolve, timeSend, timeUsed, memoryUsed, code, idLangua
   this.code = code
   this.idLanguage = idLanguage
   this.idUser = idUser
+  this.idTask = idTask
   this.contestId = contestId
   this.titleTask = titleTask
 }

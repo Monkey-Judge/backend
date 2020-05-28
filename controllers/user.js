@@ -31,16 +31,16 @@ async function register (req, res, next) {
   )
 
   try {
-    /* const userId = */await userModel.register(user)
-    // const token = jwt.sign({ id: userId })
+    const userId = await userModel.register(user)
+    const token = jwt.sign({ id: userId })
 
-    // if (process.env.NODE_ENV !== 'test') {
-    //   await emailSender.sendRegister(
-    //     req.body.email,
-    //     req.body.login,
-    //     token
-    //   )
-    // }
+    if (process.env.NODE_ENV !== 'test') {
+      await emailSender.sendRegister(
+        req.body.email,
+        req.body.login,
+        token
+      )
+    }
     res.status(201).send()
   } catch (error) {
     // console.debug(error)
