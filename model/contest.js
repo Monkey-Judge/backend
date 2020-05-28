@@ -5,6 +5,12 @@ var sqlLoad = {
   problems: ['inner join problems inner join tasks', 'and contests.id = problems.idContest and tasks.id = problems.idTask']
 }
 
+function Participant (idUser, idContest, role) {
+  this.idUser = idUser
+  this.idContest = idContest
+  this.role = role
+}
+
 function Submission (id, resolve, timeSend, timeUsed, memoryUsed, code, idLanguage, idUser, idTask, contestId, titleTask) {
   this.id = id
   this.resolve = resolve
@@ -14,13 +20,13 @@ function Submission (id, resolve, timeSend, timeUsed, memoryUsed, code, idLangua
   this.code = code
   this.idLanguage = idLanguage
   this.idUser = idUser
-  this.idTask = idTask
   this.contestId = contestId
   this.titleTask = titleTask
 }
 
 function Contest (id, begin, duration, name, description, submissions, participants, problems) {
   this.id = id
+  this.begin = begin
   this.duration = duration
   this.name = name
   this.description = description
@@ -33,6 +39,21 @@ function register (contest) {
   return new Promise((resolve, reject) => {
     mysql.pool.query('insert into contests (begin, duration, name, description) values(?, ?, ?, ?)',
       [contest.begin, contest.duration, contest.name, contest.description],
+      function (error, results, fields) {
+        if (error) {
+          return reject(error)
+        }
+
+        return resolve(results.insertId)
+      })
+  })
+}
+
+function registerParticipant (participant) {
+  console.log(participant)
+  return new Promise((resolve, reject) => {
+    mysql.pool.query('insert into participants (idUser, idContest, role) values(?, ?, ?)',
+      [participant.idUser, participant.idContest, participant.role],
       function (error, results, fields) {
         if (error) {
           return reject(error)
@@ -83,8 +104,10 @@ function findById (id, load = []) { // load is an array that can have the follow
 
 module.exports = {
   Contest: Contest,
+  Participant: Participant,
   addSubmission: Contest.addSubmission,
   register: register,
+  registerParticipant: registerParticipant,
   erase: erase,
   findById: findById,
   Submission: Submission

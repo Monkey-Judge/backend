@@ -8,7 +8,9 @@ const userModel = require('../model/user')
 
 describe('User registration', () => {
   afterEach(async () => {
-    await truncate.truncate('users')
+    await truncate.truncateParticipants('participants')
+    await truncate.truncateUsers('users')
+    await truncate.truncateContests('contests')
   })
 
   it('should create a new user ', async () => {
@@ -45,7 +47,9 @@ describe('User registration', () => {
 
 describe('User confirmation', () => {
   afterEach(async () => {
-    await truncate.truncate('users')
+    await truncate.truncateParticipants('participants')
+    await truncate.truncateUsers('users')
+    await truncate.truncateContests('contests')
   })
 
   it('should confirm a user ', async () => {
@@ -97,7 +101,9 @@ describe('User confirmation', () => {
 
 describe('User login route', () => {
   afterEach(async () => {
-    await truncate.truncate('users')
+    await truncate.truncateParticipants('participants')
+    await truncate.truncateUsers('users')
+    await truncate.truncateContests('contests')
   })
 
   it('should return a error if login is not passed', () => {

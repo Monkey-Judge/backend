@@ -14,11 +14,14 @@ function auth (req, res, next) {
   var token = req.headers.authorization
 
   if (!token) {
+    console.log('Token inexistente')
     return res.status(401).send('Token inexistente')
   }
 
   jwt.verify(token, process.env.JWT_KEY, function (err, decoded) {
     if (err) {
+      console.log('Token invalido')
+
       return res.status(401).send('Token invalido')
     }
 
