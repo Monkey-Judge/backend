@@ -202,12 +202,10 @@ CREATE TABLE `tasks` (
   `memoryLimit` int(11) NOT NULL,
   `timeLimit` int(11) NOT NULL,
   `statement` varchar(1000) DEFAULT NULL,
-  `input` mediumtext,
-  `output` mediumtext,
   `notes` mediumtext,
   `pdfLink` varchar(50) DEFAULT NULL,
   `sourceLink` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`,`timeLimit`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `fk_tasks_judge_idx` (`idjudge`),
   CONSTRAINT `fk_tasks_judge` FOREIGN KEY (`idjudge`) REFERENCES `judges` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -221,6 +219,38 @@ CREATE TABLE `tasks` (
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
+
+UNLOCK TABLES;
+
+--
+-- Table structure for table `testCases`
+--
+
+DROP TABLE IF EXISTS `testCases`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `testCases` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idTask` int(11) DEFAULT NULL,
+  `number` smallint(2) DEFAULT NULL,
+  `input` mediumtext,
+  `output` mediumtext,
+  `description` mediumtext,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `fk_tastCases_judge_idx` (`idTask`),
+  CONSTRAINT `fk_testCases_judge` FOREIGN KEY (`idTask`) REFERENCES `tasks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `testCases`
+--
+
+LOCK TABLES `testCases` WRITE;
+/*!40000 ALTER TABLE `testCases` DISABLE KEYS */;
+/*!40000 ALTER TABLE `testCases` ENABLE KEYS */;
+
 UNLOCK TABLES;
 
 --
