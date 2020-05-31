@@ -8,7 +8,25 @@ function truncateUsers () {
     return error
   })
 }
+function truncateContests () {
+  mysql.pool.query('delete from contests', function (error, results, fields) {
+    if (error) {
+      console.log(error)
+    }
+    return error
+  })
+}
+function truncateParticipants () {
+  mysql.pool.query('delete from participants', function (error, results, fields) {
+    if (error) {
+      console.log(error)
+    }
+    return error
+  })
+}
 
 module.exports = {
-  truncate: truncateUsers
+  truncateUsers: truncateUsers,
+  truncateParticipants: truncateParticipants,
+  truncateContests: truncateContests
 }
