@@ -5,7 +5,6 @@ const jwebt = require('jsonwebtoken')
 const emailSender = require('../service/mailer')
 
 async function register (req, res, next) {
-  
   if (!('login' in req.body)) {
     console.log('ERROR: Message body without username/login')
     res.status(400).send()

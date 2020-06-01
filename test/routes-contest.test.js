@@ -1,12 +1,11 @@
-/* global expect, test */
+/* global expect, afterEach, it, describe */
 
 const request = require('supertest')
 const app = require('../app')
 const taskModel = require('../model/task')
 const contestModel = require('../model/contest')
-const problemModel = require('../model/problem')
+// const problemModel = require('../model/problem')
 const truncate = require('../utils/truncate')
-
 
 describe('Testing the contest routes', () => {
   afterEach(async () => {
@@ -40,7 +39,7 @@ describe('Testing the contest routes', () => {
       name: 'neerc2023',
       description: 'cool contest'
     }
-
+    expect.assertions(3)
     try {
       const idTask = await taskModel.register(task)
       const idContest = await contestModel.register(contest)
@@ -50,8 +49,8 @@ describe('Testing the contest routes', () => {
       console.log(idTask)
 
       const problem = {
-        idTask : idTask,
-        idContest : idContest
+        idTask: idTask,
+        idContest: idContest
       }
 
       console.log(problem.idTask)
@@ -61,7 +60,6 @@ describe('Testing the contest routes', () => {
         .post('/contests/task')
         .send(problem)
       expect(res.statusCode).toEqual(200)
-    
     } catch (error) {
       console.log(error)
     }

@@ -1,8 +1,6 @@
 const problemModel = require('../model/problem')
 
 async function addTask (req, res, next) {
-
-
   if (!('idTask' in req.body)) {
     console.log('ERROR: Message body without idTask')
     res.status(400).send()
@@ -19,9 +17,9 @@ async function addTask (req, res, next) {
     req.body.idTask,
     req.body.idContest
   )
-  
-  console.log("idTask: " + problem.idTask)
-  console.log("idContest: " + problem.idContest)
+
+  console.log('idTask: ' + problem.idTask)
+  console.log('idContest: ' + problem.idContest)
 
   try {
     await problemModel.register(problem)
