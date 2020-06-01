@@ -2,7 +2,7 @@ var cheerio = require('cheerio')
 var request = require('request')
 var task = require('../model/task')
 
-function getCodeforcesProblem (contestId, problem, callback) {
+function getCodeforcesProblem (contestId, problem) {
   const url = `https://codeforces.com/contest/${contestId}/problem/${problem}`
 
   return new Promise(
@@ -28,6 +28,31 @@ function getCodeforcesProblem (contestId, problem, callback) {
   )
 }
 
+// this method get the first result on google and returns his problem (if it exists)
+function suggestCodeforcesTask (term) {
+  const searchTerm = 'codeforces ' + term
+  const sUrl = `https://www.google.com/search?q=${searchTerm}`
+
+  return new Promise(
+    (resolve, reject) => {
+      request({
+        uri: sUrl
+      }, function (error, response, body) {
+        if (error) {
+          return reject(error)
+        }
+
+        var $ = cheerio.load(body)
+
+        var title = $('a[data-uch=1] div').first()
+
+        return resolve(title.text())
+      })
+    }
+  )
+}
+
 module.exports = {
-  getCodeforcesProblem: getCodeforcesProblem
+  getCodeforcesProblem: getCodeforcesProblem,
+  suggestCodeforcesTask: suggestCodeforcesTask
 }
